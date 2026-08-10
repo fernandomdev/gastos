@@ -115,8 +115,8 @@
         }
 
         const palette = [
-            '#38bdf8', '#22c55e', '#f59e0b', '#a855f7', '#ef4444',
-            '#14b8a6', '#f97316', '#e11d48', '#84cc16', '#06b6d4'
+            '#0f766e', '#5b8a72', '#4f7ea8', '#d19a5b', '#c86e64',
+            '#7c99a4', '#8b8f95', '#9bb4a7', '#2f6f68', '#6f8fb8'
         ];
 
         const datasets = data.datasets.map((dataset, index) => ({
@@ -149,7 +149,7 @@
                     legend: {
                         position: 'bottom',
                         labels: {
-                            color: '#cbd5e1',
+                            color: '#667085',
                             usePointStyle: true,
                             boxWidth: 10,
                             boxHeight: 10,
@@ -169,10 +169,10 @@
                         title: {
                             display: true,
                             text: 'Día del mes',
-                            color: '#94a3b8',
+                            color: '#667085',
                         },
                         ticks: {
-                            color: '#94a3b8',
+                            color: '#667085',
                         },
                         grid: {
                             color: 'rgba(148, 163, 184, 0.10)',
@@ -182,10 +182,10 @@
                         title: {
                             display: true,
                             text: 'Dinero acumulado',
-                            color: '#94a3b8',
+                            color: '#667085',
                         },
                         ticks: {
-                            color: '#94a3b8',
+                            color: '#667085',
                             callback(value) {
                                 return money(value);
                             }

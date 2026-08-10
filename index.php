@@ -16,7 +16,7 @@ declare(strict_types=1);
             <div>
                 <p class="eyebrow">Control de gastos</p>
                 <h1>Gastos</h1>
-                <p class="subtitle">Tabla general de movimientos y comparativa mensual del saldo acumulado al día de hoy.</p>
+                <p class="subtitle">Vista general de movimientos importados y comparativa mensual del dinero acumulado al día de hoy.</p>
             </div>
 
             <div class="topbar-actions">

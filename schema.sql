@@ -1,8 +1,8 @@
-CREATE DATABASE IF NOT EXISTS gastos
+CREATE DATABASE IF NOT EXISTS gastos_app
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
 
-USE gastos;
+USE gastos_app;
 
 DROP TABLE IF EXISTS movimientos;
 DROP TABLE IF EXISTS categoria_reglas;
