@@ -9,6 +9,7 @@ const DB_HOST = '127.0.0.1';
 const DB_NAME = 'gastos_app';
 const DB_USER = 'root';
 const DB_PASS = '';
+const OPENING_BALANCE = 1644.0;
 
 function jsonResponse(array $payload, int $status = 200): void
 {
@@ -164,7 +165,10 @@ function hexColorForIndex(int $index): string
 
 function buildChartData(PDO $pdo): array
 {
-    $dayLimit = currentDayOfMonth();
+    $today = new DateTimeImmutable('now');
+    $currentDay = (int) $today->format('j');
+    $currentMonthKey = $today->format('Y-m');
+
     $stmt = $pdo->query("
         SELECT fecha_movimiento, debito, credito
         FROM movimientos
@@ -172,13 +176,17 @@ function buildChartData(PDO $pdo): array
     ");
     $rows = $stmt->fetchAll();
 
+    $labels = array_map('strval', range(1, 31));
+
     if (!$rows) {
         return [
-            'labels' => array_map('strval', range(1, $dayLimit)),
+            'labels' => $labels,
             'datasets' => [],
             'meta' => [
-                'day_limit' => $dayLimit,
-                'label' => 'Sin datos cargados',
+                'day_limit' => 31,
+                'label' => 'Días 1 a 31',
+                'opening_balance' => OPENING_BALANCE,
+                'current_day' => $currentDay,
             ],
         ];
     }
@@ -206,25 +214,34 @@ function buildChartData(PDO $pdo): array
 
     ksort($monthBuckets);
 
-    $labels = array_map('strval', range(1, $dayLimit));
     $datasets = [];
+    $runningBalance = OPENING_BALANCE;
 
-    foreach (array_values($monthBuckets) as $index => $bucket) {
-        $running = 0.0;
+    foreach ($monthBuckets as $monthKey => $bucket) {
+        [$year, $month] = array_map('intval', explode('-', $monthKey));
+        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
         $values = [];
 
-        for ($day = 1; $day <= $dayLimit; $day++) {
-            if (isset($bucket['days'][$day])) {
-                $running += (float) $bucket['days'][$day];
-            }
+        for ($day = 1; $day <= 31; $day++) {
+            if ($day <= $daysInMonth) {
+                if (isset($bucket['days'][$day])) {
+                    $runningBalance += (float) $bucket['days'][$day];
+                }
 
-            $values[] = $running;
+                if ($monthKey === $currentMonthKey && $day > $currentDay) {
+                    $values[] = null;
+                } else {
+                    $values[] = round($runningBalance, 2);
+                }
+            } else {
+                $values[] = null;
+            }
         }
 
         $datasets[] = [
             'label' => $bucket['label'],
-            'borderColor' => hexColorForIndex($index),
-            'backgroundColor' => hexColorForIndex($index),
+            'borderColor' => hexColorForIndex(count($datasets)),
+            'backgroundColor' => hexColorForIndex(count($datasets)),
             'data' => $values,
         ];
     }
@@ -233,8 +250,10 @@ function buildChartData(PDO $pdo): array
         'labels' => $labels,
         'datasets' => $datasets,
         'meta' => [
-            'day_limit' => $dayLimit,
-            'label' => 'Día ' . $dayLimit . ' del mes',
+            'day_limit' => 31,
+            'label' => 'Días 1 a 31',
+            'opening_balance' => OPENING_BALANCE,
+            'current_day' => $currentDay,
         ],
     ];
 }
@@ -275,11 +294,13 @@ function fetchStats(PDO $pdo): array
 
     $row = $stmt->fetch() ?: [];
 
+    $neto = (float) ($row['saldo_neto'] ?? 0);
+
     return [
         'total_movimientos' => (int) ($row['total_movimientos'] ?? 0),
         'total_gastos' => (float) ($row['total_gastos'] ?? 0),
         'total_ingresos' => (float) ($row['total_ingresos'] ?? 0),
-        'saldo_neto' => (float) ($row['saldo_neto'] ?? 0),
+        'saldo_neto' => OPENING_BALANCE + $neto,
     ];
 }
 

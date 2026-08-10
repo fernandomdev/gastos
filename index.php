@@ -38,7 +38,7 @@ declare(strict_types=1);
                 <strong class="stat-value" id="statIngresos">Gs. 0</strong>
             </article>
             <article class="card stat-card">
-                <span class="stat-label">Saldo neto</span>
+                <span class="stat-label">Saldo actual</span>
                 <strong class="stat-value" id="statSaldo">Gs. 0</strong>
             </article>
         </section>

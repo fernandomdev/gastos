@@ -115,8 +115,8 @@
         }
 
         const palette = [
-            '#0f766e', '#5b8a72', '#4f7ea8', '#d19a5b', '#c86e64',
-            '#7c99a4', '#8b8f95', '#9bb4a7', '#2f6f68', '#6f8fb8'
+            '#0f766e', '#5fa37d', '#4b7dbb', '#d18f4f', '#c86a62',
+            '#6b8798', '#8aa0b7', '#86b39d', '#2f6f68', '#7c8dbf'
         ];
 
         const datasets = data.datasets.map((dataset, index) => ({
@@ -159,6 +159,9 @@
                     tooltip: {
                         callbacks: {
                             label(context) {
+                                if (context.raw === null || context.raw === undefined) {
+                                    return `${context.dataset.label}: Sin dato`;
+                                }
                                 return `${context.dataset.label}: ${money(context.raw ?? 0)}`;
                             }
                         }
@@ -198,7 +201,8 @@
             }
         });
 
-        els.chartMeta.textContent = data.meta?.label || 'Comparativa mensual';
+        const currentDay = data.meta?.current_day ? ` • corte día ${data.meta.current_day}` : '';
+        els.chartMeta.textContent = (data.meta?.label || 'Comparativa mensual') + currentDay;
     }
 
     async function loadDashboard() {
