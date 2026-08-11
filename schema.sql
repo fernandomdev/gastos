@@ -121,3 +121,40 @@ INSERT INTO categoria_reglas (categoria_id, keyword, priority) VALUES
 ((SELECT id FROM categorias WHERE nombre='Belleza'), 'CHARME COIFFURE', 110),
 ((SELECT id FROM categorias WHERE nombre='Otros / sin clasificar'), 'Compra hecha en POS', 1),
 ((SELECT id FROM categorias WHERE nombre='Supermercado'), 'S6', 100);
+
+-- ==========================================
+-- Módulo de préstamos
+-- ==========================================
+
+CREATE TABLE IF NOT EXISTS prestamos (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    plataforma VARCHAR(40) NOT NULL,
+    id_plataforma CHAR(3) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    cuotas_totales SMALLINT UNSIGNED NOT NULL,
+    cuotas_cumplidas SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+    monto_mensual DECIMAL(14,2) NOT NULL,
+    creado_en TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    actualizado_en TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uk_prestamo_plataforma_id (plataforma, id_plataforma),
+    KEY idx_prestamos_plataforma (plataforma),
+    CONSTRAINT chk_prestamo_cuotas_totales CHECK (cuotas_totales > 0),
+    CONSTRAINT chk_prestamo_cuotas_cumplidas CHECK (cuotas_cumplidas <= cuotas_totales),
+    CONSTRAINT chk_prestamo_monto CHECK (monto_mensual > 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS prestamos_pagos (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    prestamo_id BIGINT UNSIGNED NOT NULL,
+    periodo CHAR(7) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    monto_abonado DECIMAL(14,2) NOT NULL,
+    abonado_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uk_prestamo_pago_periodo (prestamo_id, periodo),
+    KEY idx_prestamos_pagos_periodo (periodo),
+    CONSTRAINT fk_prestamos_pagos_prestamo
+        FOREIGN KEY (prestamo_id) REFERENCES prestamos(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT chk_prestamos_pagos_monto CHECK (monto_abonado > 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

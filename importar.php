@@ -8,7 +8,7 @@ date_default_timezone_set('America/Asuncion');
 const DB_HOST = '127.0.0.1';
 const DB_NAME = 'gastos_app';
 const DB_USER = 'root';
-const DB_PASS = '';
+const DB_PASS = 'ymPWOUSuv2+O';
 const OPENING_BALANCE = 1644.0;
 
 function jsonResponse(array $payload, int $status = 200): void

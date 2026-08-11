@@ -19,7 +19,11 @@ declare(strict_types=1);
                 <p class="subtitle">Vista general de movimientos importados y comparativa mensual del dinero acumulado al día de hoy.</p>
             </div>
 
-            <div class="topbar-actions">
+            <div class="topbar-actions topbar-actions-stack">
+                <nav class="main-nav" aria-label="Secciones">
+                    <a href="index.php" class="nav-link is-active">Gastos</a>
+                    <a href="prestamos.php" class="nav-link">Préstamos</a>
+                </nav>
                 <button class="btn btn-primary" id="openImportModal">Importar archivo</button>
             </div>
         </header>
