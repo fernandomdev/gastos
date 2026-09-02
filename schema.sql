@@ -76,9 +76,12 @@ INSERT INTO categorias (nombre, tipo, color) VALUES
 ('Servicios / telefonía', 'gasto', '#eab308'),
 ('Educación', 'gasto', '#8b5cf6'),
 ('Belleza', 'gasto', '#ec4899'),
+('Tecnología / electrónica', 'gasto', '#0ea5e9'),
 ('Otros / sin clasificar', 'otro', '#94a3b8');
 
 INSERT INTO categoria_reglas (categoria_id, keyword, priority) VALUES
+((SELECT id FROM categorias WHERE nombre='Préstamos'), 'AJUSTE PRESTAMO SEPTIEMBRE', 220),
+((SELECT id FROM categorias WHERE nombre='Digital / suscripciones'), 'AJUSTE DIGITAL SUSCRIPCION', 215),
 ((SELECT id FROM categorias WHERE nombre='Ingresos / acreditaciones'), 'ACREDITACION', 200),
 ((SELECT id FROM categorias WHERE nombre='Ingresos / acreditaciones'), 'Transferenc. Recibida SPI', 195),
 ((SELECT id FROM categorias WHERE nombre='Transferencias'), 'Transferencia Enviada SPI', 190),
@@ -119,6 +122,12 @@ INSERT INTO categoria_reglas (categoria_id, keyword, priority) VALUES
 ((SELECT id FROM categorias WHERE nombre='Servicios / telefonía'), 'Tigo Compra de saldo', 120),
 ((SELECT id FROM categorias WHERE nombre='Educación'), 'Universidad Americana', 115),
 ((SELECT id FROM categorias WHERE nombre='Belleza'), 'CHARME COIFFURE', 110),
+((SELECT id FROM categorias WHERE nombre='Comida'), 'DASSTIN LOMITERIA', 109),
+((SELECT id FROM categorias WHERE nombre='Comida'), 'B Y P BUSINESS', 108),
+((SELECT id FROM categorias WHERE nombre='Supermercado'), 'BIGGIE', 107),
+((SELECT id FROM categorias WHERE nombre='Impuestos'), 'PagoSrv DNIT-SET', 106),
+((SELECT id FROM categorias WHERE nombre='Tecnología / electrónica'), 'TECNO BOX', 105),
+((SELECT id FROM categorias WHERE nombre='Comida'), 'MILLARD S', 104),
 ((SELECT id FROM categorias WHERE nombre='Otros / sin clasificar'), 'Compra hecha en POS', 1),
 ((SELECT id FROM categorias WHERE nombre='Supermercado'), 'S6', 100);
 
